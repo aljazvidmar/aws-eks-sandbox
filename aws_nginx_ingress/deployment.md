@@ -56,3 +56,8 @@ kubectl apply -f cheese-ingress.yaml
 ### Load balancer provisioning
 
 After one the load balancer is provisioned, which takes about a few minutes, you have to assign its DNS name to a new CNAME record in DNS domain managment. This allows that the domain (e.g. `cheese.example.com`) reaches the AWS load balancer.
+
+```bash
+# get the DNSName of the created NLB
+export nlb_dnsname=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[*].[DNSName]' --output text)
+```
