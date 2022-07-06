@@ -1,0 +1,65 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-fanout-example
+  namespace: eks-cheese-app
+  annotations:    
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+spec:
+  ingressClassName: alb
+  rules:  
+    - host: stilton.adesignstudio.net
+      http:
+        paths: 
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation   
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stilton
+                port:
+                  number: 80     
+    - host: cheddar.adesignstudio.net
+      http:
+        paths:   
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation 
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cheddar
+                port:
+                  number: 80 
+    - host: wensleydale.adesignstudio.net
+      http:
+        paths:  
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation  
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wensleydale
+                port:
+                  number: 80      

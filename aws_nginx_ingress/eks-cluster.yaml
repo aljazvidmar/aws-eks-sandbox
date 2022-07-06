@@ -1,0 +1,15 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: k8-nlb-cluster
+  region: us-east-1
+  version: "1.20"
+managedNodeGroups:
+- name: k8-nlb-cluster-nodegroup
+  labels:
+    role: test
+  instanceType: t2.small
+  desiredCapacity: 2
+  minSize: 2
+  maxSize: 4

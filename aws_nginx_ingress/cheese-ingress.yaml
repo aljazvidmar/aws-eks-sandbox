@@ -1,0 +1,38 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  namespace: eks-cheese-app-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx   
+  rules:
+  - http:
+      paths:
+      - path: /stilton/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: stilton
+            port:
+              number: 80   
+  - http:
+      paths:
+      - path: /cheddar/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: cheddar
+            port:
+              number: 80  
+  - http:
+      paths:
+      - path: /wensleydale/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: wensleydale
+            port:
+              number: 80                
